@@ -9,6 +9,8 @@ namespace Movie_Mngt_System.Models
     {
         public int booking_id { get; set; }
         public int user_id { get; set; }
+        public string cat_name { get; set; }
+        public string movie_name { get; set; }
         public int cat_id { get; set; }
         public int movie_id { get; set; }
         public int no_of_ticket { get; set; }

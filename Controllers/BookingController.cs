@@ -77,9 +77,29 @@ namespace Movie_Mngt_System.Controllers
         }
 
         // GET: Booking/Details/5
-        public ActionResult Details(int id)
+        public ActionResult Details()
         {
-            return View();
+
+            string connectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ToString();
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("Get_Booking", connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+           List<Booking>booklist = new List<Booking>();
+            connection.Open();
+            cmd.Parameters.AddWithValue("@user_id",Get_User_id());
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                Booking booking = new Booking();
+                booking.cat_name = reader["Cat_type"].ToString();
+                booking.movie_name = reader["Movie_name"].ToString() ;
+                booking.no_of_ticket = Convert.ToInt32(reader["No_of_Tickets"]);
+                booking.amount = Convert.ToInt32(reader["amount"]);
+                booklist.Add(booking);
+            }
+            reader.Close();
+            connection.Close();
+            return View(booklist);
         }
 
         // GET: Booking/Create
