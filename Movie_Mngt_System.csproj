@@ -218,6 +218,7 @@
     <Content Include="Views\Booking\Create.cshtml" />
     <Content Include="Views\Login\Create.cshtml" />
     <Content Include="Views\Booking\Details.cshtml" />
+    <Content Include="Views\Booking\Edit.cshtml" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

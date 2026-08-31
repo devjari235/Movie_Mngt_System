@@ -1,0 +1,132 @@
+﻿@model Movie_Mngt_System.Models.Booking
+
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success">
+        @ViewBag.Message
+    </div>
+}
+@if (ViewBag.Error != null)
+{
+    <div class="alert alert-danger">
+        @ViewBag.Error
+    </div>
+}
+
+<h2>Edit</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Booking</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @* @Html.LabelFor(model => model.booking_id, htmlAttributes: new { @class = "control-label col-md-2" })*@
+            <div class="col-md-10">
+                @*  @Html.EditorFor(model => model.booking_id, new { htmlAttributes = new { @class = "form-control" } })*@
+                <input type="hidden" id="booking_id" name="booking_id" value="@Model.booking_id" />
+                @Html.ValidationMessageFor(model => model.booking_id, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        @* <div class="form-group">
+                @Html.LabelFor(model => model.user_id, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.user_id, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.user_id, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
+            <div class="form-group">
+                @Html.LabelFor(model => model.cat_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.cat_name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.cat_name, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        @*  <div class="form-group">
+                @Html.LabelFor(model => model.movie_name, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.movie_name, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.movie_name, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.cat_id, "Category", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.cat_id, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.cat_id, "", new { @class = "text-danger" })*@
+
+                <select id="cat_id" name="cat_id" class="form-control" onchange="window.location.href='@Url.Action("Edit", "Booking")?cat_id=' + this.value;">
+                    @if (ViewBag.CategoryList != null)
+                    {
+                        <option value="">--Select Category--</option>
+                        foreach (var item in ViewBag.CategoryList)
+                        {
+                            <option value="@item.Value" @(item.Value == Model.cat_id.ToString() ? "selected" : "")>
+                                @item.Text
+                            </option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.movie_id, "Movie Name", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.movie_id, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.movie_id, "", new { @class = "text-danger" })*@
+
+                <select id="movie_id" name="movie_id" class="form-control" onchange="window.location.href='@Url.Action("Edit", "Booking")?cat_id=@Model.cat_id&movie_id=' + this.value;">
+                    @if (ViewBag.MovieList != null)
+                    {
+                        <option value="">--Select Movie--</option>
+                        foreach (var item in ViewBag.MovieList)
+                        {
+                            <option value="@item.Value" @(item.Value == Model.movie_id.ToString() ? "Selected" : "")>@item.Text </option>
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.no_of_ticket, "No of Tickets", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <input type="number" id="no_of_ticket" name="no_of_ticket" class="form-control" value="@Model.no_of_ticket" onchange="window.location.href='@Url.Action("Edit", "Booking")?cat_id=@Model.cat_id&movie_id=@Model.movie_id&no_of_ticket=' + this.value;" />
+                @Html.ValidationMessageFor(model => model.no_of_ticket, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.amount, "Amount", htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @*@Html.EditorFor(model => model.amount, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.amount, "", new { @class = "text-danger" })*@
+                <input type="text" class="form-control" value="@ViewBag.TotalPrice" disabled />
+                <input type="hidden" name="amount" value="@Model.amount" />
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Details")
+</div>
