@@ -91,6 +91,7 @@ namespace Movie_Mngt_System.Controllers
             while (reader.Read())
             {
                 Booking booking = new Booking();
+                booking.booking_id = Convert.ToInt32(reader["Booking_id"]);
                 booking.cat_name = reader["Cat_type"].ToString();
                 booking.movie_name = reader["Movie_name"].ToString() ;
                 booking.no_of_ticket = Convert.ToInt32(reader["No_of_Tickets"]);
@@ -314,22 +315,61 @@ namespace Movie_Mngt_System.Controllers
         // GET: Booking/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            Booking booking = new Booking();
+            string connectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ToString();
+            SqlConnection connection = new SqlConnection(connectionString);
+            SqlCommand cmd = new SqlCommand("Get_Booking_ById", connection);
+            cmd.CommandType = CommandType.StoredProcedure;
+         
+            connection.Open();
+            cmd.Parameters.AddWithValue("@Booking_id",id);
+            SqlDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+              
+                booking.booking_id = Convert.ToInt32(reader["Booking_id"]);
+                booking.user_id = Convert.ToInt32(reader["User_id"]);
+                booking.cat_name = reader["Cat_type"].ToString();
+                booking.movie_name = reader["Movie_name"].ToString();
+                booking.no_of_ticket = Convert.ToInt32(reader["No_of_Tickets"]);
+                booking.amount = Convert.ToInt32(reader["amount"]);
+               
+            }
+            reader.Close();
+            connection.Close();
+            return View(booking);
         }
 
         // POST: Booking/Delete/5
         [HttpPost]
-        public ActionResult Delete(int id, FormCollection collection)
+        public ActionResult Delete(int id, Booking book)
         {
             try
             {
-                // TODO: Add delete logic here
+                if (ModelState.IsValid)
+                {
+                    string connectionString = ConfigurationManager.ConnectionStrings["dbconnection"].ToString();
+                    SqlConnection connection = new SqlConnection(connectionString);
+                    SqlCommand cmd = new SqlCommand("Delete_Booking", connection);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    connection.Open();
+                    cmd.Parameters.AddWithValue("@Booking_id",id);
+              
+                    int i = cmd.ExecuteNonQuery();
+                    connection.Close();
+                    if (i > 0)
+                    {
+                        ViewBag.Message = "Delete Sucessfully";
+                        return View(book);
+                    }
+                }
 
-                return RedirectToAction("Index");
+                return View(book);
             }
-            catch
+            catch (Exception ex)
             {
-                return View();
+                ViewBag.Error = ex + " Delete Failed";
+                return View(book);
             }
         }
     }
