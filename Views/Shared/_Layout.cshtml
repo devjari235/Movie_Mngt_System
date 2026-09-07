@@ -7,6 +7,14 @@
     <title>@ViewBag.Title - Movie Management System</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    @{
+        if (Request.QueryString["logout"] == "true")
+        {
+            Session.Clear();
+            Session.Abandon();
+            Response.Redirect(Url.Action("Create", "Login"));
+        }
+    }
 </head>
 <body>
     <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
@@ -18,12 +26,22 @@
             </button>
             <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
                 <ul class="navbar-nav flex-grow-1">
-                    <li>@Html.ActionLink("Movie", "Create", "Movie", new { area = "" }, new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Category", "Create", "Category", new { area = "" }, new { @class = "nav-link" })</li>
                     @if (Session["Email"] != null)
                     {
-                        <li>@Html.ActionLink("Booking", "Create", "Booking", new { area = "" }, new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Logout", "Create", "Login", new { area = "" }, new { @class = "nav-link" })</li>
+                        if (Session["Email"].ToString() == "admin@gmail.com")
+                        {
+                            <li>@Html.ActionLink("Movie", "Create", "Movie", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Category", "Create", "Category", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Search", "Details", "Search", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li><a href="?logout=true" class="nav-link">Logout</a></li>
+                        }
+                        else
+                        {
+                            <li>@Html.ActionLink("Booking", "Create", "Booking", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Profile", "Edit", "User", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li>@Html.ActionLink("Search", "Details", "Search", new { area = "" }, new { @class = "nav-link" })</li>
+                            <li><a href="?logout=true" class="nav-link">Logout</a></li>
+                        }
                     }
                     else
                     {
