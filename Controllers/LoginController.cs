@@ -47,7 +47,15 @@ namespace Movie_Mngt_System.Controllers
                 if (result > 0)
                 {
                     Session["Email"] = log.email_id;
-                    return RedirectToAction("Details", "Booking");
+                    if (Session["Email"].ToString() == "admin@gmail.com")
+                    {
+                        return RedirectToAction("Details", "Search");
+                    }
+                    else
+                    {
+                        return RedirectToAction("Details", "Booking");
+                    }
+                   
                 }
                 else
                 {

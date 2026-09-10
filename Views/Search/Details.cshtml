@@ -1,0 +1,82 @@
+﻿@model IEnumerable<Movie_Mngt_System.Models.Movie>
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Details</h2>
+
+<p>
+    @if (Session["Email"] != null)
+    {
+        if (Session["Email"].ToString() == "admin@gmail.com")
+        {
+            @Html.ActionLink("Create New", "Create", "Movie");
+        }
+    }
+</p>
+<form>
+    <select id="Cat_id"
+            name="Cat_id"
+            class="form-control"
+            onchange="window.location.href='@Url.Action("Details", "Search")?cat_id=' + this.value;">
+
+        <option value="">--Select Category--</option>
+
+        @foreach (var item in ViewBag.CategoryList)
+        {
+            <option value="@item.Value" @(item.Value == Convert.ToString(ViewBag.SelectedCatId) ? "Selected" : "" )>@item.Text</option>
+        }
+
+    </select>
+</form>
+<table class="table">
+    <tr>
+        @*<th>
+            @Html.DisplayNameFor(model => model.movie_id)
+        </th>*@
+        <th>
+            <label>Movie</label>
+           @* @Html.DisplayNameFor(model => model.movie_name)*@
+        </th>
+        <th>
+            <label>Relese Date</label>
+           @* @Html.DisplayNameFor(model => model.relese_date)*@
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.cat_id)
+        </th>*@
+        <th>
+            <label>Rate</label>
+            @*@Html.DisplayNameFor(model => model.rate)*@
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+       @* <td>
+            @Html.DisplayFor(modelItem => item.movie_id)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.movie_name)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.relese_date)
+        </td>
+       @* <td>
+            @Html.DisplayFor(modelItem => item.cat_id)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.rate)
+        </td>
+      @*  <td>
+            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+        </td>*@
+    </tr>
+}
+
+</table>
